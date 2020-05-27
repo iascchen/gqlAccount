@@ -7,11 +7,12 @@ import cookieParser from 'cookie-parser'
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import cors from 'cors'
-import {DB_URI, SESSION_SECRET} from './utils/secrets'
-import typeDefs from './graphql/types'
 import mongoose from 'mongoose'
-import resolvers from './graphql/resolvers'
+
+import {DB_URI, SESSION_SECRET} from './utils/secrets'
 import {models} from './datasource'
+import typeDefs from './graphql/types'
+import resolvers from './graphql/resolvers'
 
 // Connect to MongoDB
 mongoose.Promise = global.Promise
@@ -40,10 +41,6 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // app.use('*', jwtCheck, requireAuth, checkScope);
-
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
 
 const getUser = async (req) => {
     const token = req.headers['token']
