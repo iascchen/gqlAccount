@@ -8,20 +8,37 @@ export default gql`
         website: String,
         picture: String
     }
-
+  
     type User {
         _id: String!
+        
         mobile: String!
+        password: String
+        passwordResetToken: String
+        passwordResetExpires: Date
+    
         email: String
+        wechat: String
+        weibo: String
+        facebook: String
+        twitter: String
+        google: String
+        github: String
+
         profile: Profile
+        
+        organizations: [Organization!]!
+        branches: [Branch!]!
     }
 
-    type Query {
+    extend type Query {
         user(_id: ID!): User!
         users: [User!]!
+                
+        login(mobile: String!, password: String!): Token!
     }
 
-    type Mutation {
+    extend type Mutation {
         createUser(user: CreateUserInput): User!
         updateUser(_id: String!, user: UpdateUserInput!): User!
         deleteUser(_id: String!): User!
@@ -46,4 +63,4 @@ export default gql`
         website: String,
         picture: String
     }
-`;
+`

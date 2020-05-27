@@ -1,15 +1,17 @@
 import express from 'express'
-import {ApolloServer} from 'apollo-server-express'
+import {ApolloServer, AuthenticationError} from 'apollo-server-express'
 import path from 'path'
 import bodyParser from 'body-parser'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
+import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import cors from 'cors'
-import {DB_URI} from './utils/secrets'
+import {DB_URI, SESSION_SECRET} from './utils/secrets'
 import typeDefs from './graphql/types'
 import mongoose from 'mongoose'
 import resolvers from './graphql/resolvers'
+import {models} from './datasource'
 
 // Connect to MongoDB
 mongoose.Promise = global.Promise
@@ -43,10 +45,35 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-const server = new ApolloServer({ typeDefs, resolvers })
+const getUser = async (req) => {
+    const token = req.headers['token']
+
+    if (token) {
+        try {
+            return await jwt.verify(token, SESSION_SECRET)
+        } catch (e) {
+            throw new AuthenticationError('Your session expired. Sign in again.')
+        }
+    }
+}
+
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+        if (req) {
+            const me = await getUser(req)
+            return {
+                me,
+                models,
+            }
+        }
+    },
+})
 server.applyMiddleware({ app, path: '/api' })
 
 app.listen(app.get('port'), () => {
-    console.log('  🚀 Server is running at http://localhost:%d%s in %s mode', app.get('port'), server.graphqlPath, app.get('env'))
+    console.log('  🚀 Server is running at http://localhost:%d%s in %s mode', app.get('port'), server.graphqlPath,
+        app.get('env'))
     console.log('  Press CTRL-C to stop\n')
 })

@@ -1,7 +1,4 @@
-// import { mergeTypes } from 'merge-graphql-schemas'
-
 import user from './user'
-// import Post from "./Post/";
-// import Comment from "./Comment/";
+import organization from './organization'
 
-export default user
+export default [user, organization]

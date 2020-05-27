@@ -1,17 +1,21 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt-nodejs'
+import {ORG_STATUS_NORMAL} from './constants'
 
 const UserSchema = new mongoose.Schema({
     mobile: { type: String, unique: true, required: true },
-    email: String,
+
     password: String,
     passwordResetToken: String,
     passwordResetExpires: Date,
 
-    // facebook: String,
-    // twitter: String,
-    // google: String,
-    // tokens: Array,
+    email: String,
+    wechat: String,
+    weibo: String,
+    facebook: String,
+    twitter: String,
+    google: String,
+    github: String,
 
     profile: {
         name: String,
@@ -19,7 +23,8 @@ const UserSchema = new mongoose.Schema({
         location: String,
         website: String,
         picture: String
-    }
+    },
+    status: { type: Number, required: true, default: ORG_STATUS_NORMAL }
 }, { timestamps: true })
 
 /**
@@ -45,5 +50,14 @@ const comparePassword = function (candidatePassword, cb) {
 }
 
 UserSchema.methods.comparePassword = comparePassword
+
+UserSchema.index({ email: 1 })
+UserSchema.index({ wechat: 1 })
+UserSchema.index({ weibo: 1 })
+UserSchema.index({ facebook: 1 })
+UserSchema.index({ twitter: 1 })
+UserSchema.index({ google: 1 })
+UserSchema.index({ github: 1 })
+UserSchema.index({ status: 1 })
 
 export default mongoose.model('User', UserSchema)

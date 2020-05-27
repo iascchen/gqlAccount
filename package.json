@@ -58,7 +58,7 @@
     "nodemonConfig": {
         "exec": "npm run dev",
         "watch": [
-            "server/*",
+            "src/*",
             "public/*"
         ],
         "ignore": [

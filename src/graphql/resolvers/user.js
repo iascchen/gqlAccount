@@ -1,30 +1,56 @@
-import User from '../../datasource/models/User'
-// import Post from "../../../server/models/Post";
-// import Comment from "../../../server/models/Comment";
+import bcrypt from 'bcrypt-nodejs'
+import jwt from 'jsonwebtoken'
+import {AuthenticationError} from 'apollo-server-express'
+import {SESSION_SECRET} from '../../utils/secrets'
 
 export default {
     Query: {
-        user: async (parent, { _id }, context, info) => {
-            return await User.findOne({ _id }).exec()
+        user: async (parent, { _id }, { models: { userModel }, me }, info) => {
+            if (!me) {
+                throw new AuthenticationError('You are not authenticated')
+            }
+            const user = await userModel.findById({ _id }).exec()
+            return user
         },
-        users: async (parent, args, context, info) => {
-            const users = await User.find({})
-                .populate()
-                .exec()
+        login: async (parent, { mobile, password }, { models: { userModel } }, info) => {
+            const user = await userModel.findOne({ mobile }).exec()
+
+            if (!user) {
+                throw new AuthenticationError('Invalid credentials')
+            }
+
+            const matchPasswords = bcrypt.compareSync(password, user.password)
+
+            if (!matchPasswords) {
+                throw new AuthenticationError('Invalid credentials')
+            }
+
+            const token = jwt.sign({ id: user.id }, SESSION_SECRET, { expiresIn: 24 * 10 * 50 })
+
+            return {
+                token,
+            }
+        },
+        users: async (parent, {}, { models: { userModel }, me }, info) => {
+            // users: async (parent, args, context, info) => {
+
+            if (!me) {
+                throw new AuthenticationError('You are not authenticated')
+            }
+            const users = await userModel.find({}).populate().exec()
 
             return users.map(u => ({
                 _id: u._id.toString(),
-                email: u.email,
+                mobile: u.mobile,
                 profile: u.profile,
             }))
         }
     },
     Mutation: {
-        createUser: async (parent, { user }, context, info) => {
-            const newUser = await new User({
-                name: user.name,
+        createUser: async (parent, { user }, { models: { userModel } }, info) => {
+            const newUser = await new userModel.create({
+                mobile: user.mobile,
                 email: user.email,
-                age: user.age
             })
 
             return new Promise((resolve, reject) => {
@@ -33,29 +59,31 @@ export default {
                 })
             })
         },
-        updateUser: async (parent, { _id, user }, context, info) => {
+        updateUser: async (parent, { _id, user }, { models: { userModel } }, info) => {
             return new Promise((resolve, reject) => {
-                User.findByIdAndUpdate(_id, { $set: { ...user } }, { new: true }).exec(
+                userModel.findByIdAndUpdate(_id, { $set: { ...user } }, { new: true }).exec(
                     (err, res) => {
                         err ? reject(err) : resolve(res)
                     }
                 )
             })
         },
-        deleteUser: async (parent, { _id }, context, info) => {
+        deleteUser: async (parent, { _id }, { models: { userModel } }, info) => {
             return new Promise((resolve, reject) => {
-                User.findByIdAndDelete(_id).exec((err, res) => {
+                userModel.findByIdAndDelete(_id).exec((err, res) => {
                     err ? reject(err) : resolve(res)
                 })
             })
         }
     },
     User: {
-        // Organizations: async ({ _id }, args, context, info) => {
-        //     return await Organization.find({ author: _id })
-        // },
-        // comments: async ({ _id }, args, context, info) => {
-        //     return await Comment.find({ author: _id })
-        // }
+        organizations: async ({ _id }, args, { models: { organizationModel } }, info) => {
+            const ret = await organizationModel.find({ users: _id }).exec()
+            return ret
+        },
+        branches: async ({ _id }, args, { models: { branchModel } }, info) => {
+            const ret = await branchModel.find({ branches: _id }).exec()
+            return ret
+        },
     }
 }
