@@ -7,14 +7,11 @@ export default gql`
         token: String!
         expires: Date!
 
-        mobile: String,
-        email: String,
-        wechat: String,
-        weibo: String,
-        facebook: String,
-        twitter: String,
-        google: String,
-        github: String,
+        fromUserId: String!
+        toUserId: String!
+    
+        organizationId: String!
+        branchId: String
     }
 
     extend type Query {
@@ -30,13 +27,10 @@ export default gql`
         token: String!
         expires: Date!
 
-        mobile: String,
-        email: String,
-        wechat: String,
-        weibo: String,
-        facebook: String,
-        twitter: String,
-        google: String,
-        github: String,
+        fromUserId: String!
+        toUserId: String!
+    
+        organizationId: String!
+        branchId: String
     }
 `;

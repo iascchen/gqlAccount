@@ -16,6 +16,8 @@ export default gql`
         admin: String!
         adminTransferToken: String
         adminTransferExpires: Date
+        
+        organization: Organization
     
         status: Int
     }

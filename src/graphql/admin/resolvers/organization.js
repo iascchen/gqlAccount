@@ -9,22 +9,27 @@ export default {
             const organization = await organizationModel.findById({ _id }).exec()
             return organization
         },
-        organizations: async (parent, {}, { models: { organizationModel }, me }, info) => {
-            // organizations: async (parent, args, context, info) => {
-
+        organizations: async (parent, { keyword }, { models: { organizationModel }, me }, info) => {
             if (!me) {
                 throw new AuthenticationError('You are not authenticated')
             }
-            const organizations = await organizationModel.find({}).populate().exec()
+
+            const query = keyword
+                ? { $or: [{ name: { '$regex': keyword } }, { desc: { '$regex': keyword } }] }
+                : {}
+            const organizations = await organizationModel.find(query).populate().exec()
             return organizations
         }
     },
     Mutation: {
-        createOrganization: async (parent, { organization }, { models: { organizationModel } }, info) => {
-            const newOrganization = await new organizationModel.create({
-                mobile: organization.mobile,
-                email: organization.email,
-            })
+        createOrganization: async (parent, { organization }, { models: { organizationModel }, me}, info) => {
+            if (!me) {
+                throw new AuthenticationError('You are not authenticated')
+            }
+
+            const org = { ...organization }
+            org.admin = me._id
+            const newOrganization = await new organizationModel.create(org)
             return newOrganization
         },
         updateOrganization: async (parent, { _id, organization }, { models: { organizationModel } }, info) => {

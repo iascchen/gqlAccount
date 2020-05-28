@@ -5,6 +5,8 @@ export default gql`
         _id: String!
         name: String!
         aclHash: [String]!
+        
+        aclList: [ACL]
     }
 
     extend type Query {

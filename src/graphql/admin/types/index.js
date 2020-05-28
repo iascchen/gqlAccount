@@ -1,4 +1,4 @@
-import basic from './basic'
+import basic from '../../common/types/basic'
 import User from './User'
 import Organization from './Organization'
 import Branch from './Branch'

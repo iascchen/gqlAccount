@@ -7,6 +7,8 @@ export default gql`
         orgId: String
         branchId: String
         aclHashes: [String]
+        
+        aclList: [ACL]
     }
 
     extend type Query {

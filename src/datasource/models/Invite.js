@@ -4,6 +4,10 @@ const InviteSchema = new mongoose.Schema({
     token: { type: String, unique: true, required: true },
     expires: Date,
 
+    fromUserId: { type: String, required: true },
+    organizationId: String,
+    branchId: String,
+
     mobile: String,
     email: String,
     wechat: String,

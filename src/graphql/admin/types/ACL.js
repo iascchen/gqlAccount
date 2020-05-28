@@ -9,7 +9,7 @@ export default gql`
 
     extend type Query {
         acl(aclHash: String!): ACL!
-        acls: [ACL!]!
+        aclList: [ACL!]!
     }
 
     extend type Mutation {

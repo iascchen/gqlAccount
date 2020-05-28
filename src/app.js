@@ -11,8 +11,8 @@ import mongoose from 'mongoose'
 
 import {DB_URI, SESSION_SECRET} from './utils/secrets'
 import {models} from './datasource'
-import typeDefs from './graphql/types'
-import resolvers from './graphql/resolvers'
+import adminTypeDefs from './graphql/admin/types'
+import adminResolvers from './graphql/admin/resolvers'
 
 // Connect to MongoDB
 mongoose.Promise = global.Promise
@@ -54,23 +54,44 @@ const getUser = async (req) => {
     }
 }
 
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+const adminServer = new ApolloServer({
+    typeDefs: adminTypeDefs,
+    resolvers: adminResolvers,
     context: async ({ req }) => {
         if (req) {
             const me = await getUser(req)
-            return {
-                me,
-                models,
+            if(!me){
+                throw new AuthenticationError('Your session expired. Sign in again.')
+            } else {
+                return {
+                    me,
+                    models,
+                }
             }
         }
     },
 })
-server.applyMiddleware({ app, path: '/api' })
+adminServer.applyMiddleware({ app, path: '/admin' })
+
+// const apiServer = new ApolloServer({
+//     typeDefs: apiTypeDefs,
+//     resolvers: apiResolvers,
+//     context: async ({ req }) => {
+//         if (req) {
+//             const me = await getUser(req)
+//             return {
+//                 me,
+//                 models,
+//             }
+//         }
+//     },
+// })
+// apiServer.applyMiddleware({ app, path: '/api' })
 
 app.listen(app.get('port'), () => {
-    console.log('  🚀 Server is running at http://localhost:%d%s in %s mode', app.get('port'), server.graphqlPath,
+    console.log('  🚀 Admin Server is running at http://localhost:%d%s in %s mode', app.get('port'), adminServer.graphqlPath,
         app.get('env'))
+    // console.log('  🚀 API Server is running at http://localhost:%d%s in %s mode', app.get('port'), apiServer.graphqlPath,
+    //     app.get('env'))
     console.log('  Press CTRL-C to stop\n')
 })

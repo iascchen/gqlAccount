@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt-nodejs'
 import jwt from 'jsonwebtoken'
 import {AuthenticationError} from 'apollo-server-express'
-import {SESSION_SECRET} from '../../utils/secrets'
+import {SESSION_SECRET} from '../../../utils/secrets'
 
 export default {
     Query: {
@@ -9,8 +9,22 @@ export default {
             if (!me) {
                 throw new AuthenticationError('You are not authenticated')
             }
-            const user = await userModel.findById({ _id }).exec()
-            return user
+            const entity = await userModel.findById({ _id }).exec()
+            return entity
+        },
+        users: async (parent, {}, { models: { userModel }, me }, info) => {
+            // users: async (parent, args, context, info) => {
+
+            if (!me) {
+                throw new AuthenticationError('You are not authenticated')
+            }
+            const users = await userModel.find({}).populate().exec()
+
+            return users.map(u => ({
+                _id: u._id.toString(),
+                mobile: u.mobile,
+                profile: u.profile,
+            }))
         },
         login: async (parent, { mobile, password }, { models: { userModel } }, info) => {
             const user = await userModel.findOne({ mobile }).exec()
@@ -31,20 +45,6 @@ export default {
                 token,
             }
         },
-        users: async (parent, {}, { models: { userModel }, me }, info) => {
-            // users: async (parent, args, context, info) => {
-
-            if (!me) {
-                throw new AuthenticationError('You are not authenticated')
-            }
-            const users = await userModel.find({}).populate().exec()
-
-            return users.map(u => ({
-                _id: u._id.toString(),
-                mobile: u.mobile,
-                profile: u.profile,
-            }))
-        }
     },
     Mutation: {
         createUser: async (parent, { user }, { models: { userModel } }, info) => {

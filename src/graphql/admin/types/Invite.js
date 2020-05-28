@@ -6,6 +6,10 @@ export default gql`
         
         token: String!
         expires: Date!
+        
+        fromUserId: String!    
+        organizationId: String
+        branchId: String
 
         mobile: String,
         email: String,
@@ -30,6 +34,10 @@ export default gql`
         token: String!
         expires: Date!
 
+        fromUserId: String!    
+        organizationId: String
+        branchId: String
+        
         mobile: String,
         email: String,
         wechat: String,
