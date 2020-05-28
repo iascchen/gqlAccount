@@ -22,6 +22,8 @@ RUN yarn config get registry
 WORKDIR /opt/app
 COPY package.json /opt/app/package.json
 COPY yarn.lock /opt/app/yarn.lock
-RUN yarn && yarn build
+RUN yarn
 
 COPY . /opt/app
+RUN yarn clean && yarn build
+COPY ./dist /opt/app
