@@ -5,6 +5,7 @@ export default gql`
     
     type Token {
         token: String!
+        user: String
     }
 
     type Query {

@@ -13,20 +13,18 @@ export default {
             return entity
         },
         users: async (parent, {}, { models: { userModel }, me }, info) => {
-            // users: async (parent, args, context, info) => {
-
             if (!me) {
                 throw new AuthenticationError('You are not authenticated')
             }
             const users = await userModel.find({}).populate().exec()
-
+            console.log(users)
             return users.map(u => ({
                 _id: u._id.toString(),
                 mobile: u.mobile,
                 profile: u.profile,
             }))
         },
-        login: async (parent, { mobile, password }, { models: { userModel } }, info) => {
+        loginByMobile: async (parent, { mobile, password }, { models: { userModel } }, info) => {
             const user = await userModel.findOne({ mobile }).exec()
 
             if (!user) {
@@ -34,24 +32,26 @@ export default {
             }
 
             const matchPasswords = bcrypt.compareSync(password, user.password)
-
             if (!matchPasswords) {
                 throw new AuthenticationError('Invalid credentials')
             }
-
-            const token = jwt.sign({ id: user.id }, SESSION_SECRET, { expiresIn: 24 * 10 * 50 })
-
-            return {
-                token,
+            console.log(user.toJSON())
+            const token = jwt.sign({ id: user._id }, SESSION_SECRET, { expiresIn: 24 * 10 * 50 })
+            return { token, user: JSON.stringify(user) }
+        },
+        me: async (parent, {}, { models: { userModel }, me }, info) => {
+            if (!me) {
+                throw new AuthenticationError('You are not authenticated')
             }
+            const entity = await userModel.findById(me.id).exec()
+            return entity
         },
     },
     Mutation: {
         createUser: async (parent, { user }, { models: { userModel } }, info) => {
-            const newUser = await new userModel.create({
-                mobile: user.mobile,
-                email: user.email,
-            })
+            console.log('createUser', user)
+
+            const newUser = await new userModel(user)
 
             return new Promise((resolve, reject) => {
                 newUser.save((err, res) => {

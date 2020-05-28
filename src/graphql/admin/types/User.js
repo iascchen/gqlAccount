@@ -2,10 +2,10 @@ import {gql} from 'apollo-server-express'
 
 export default gql`
     type Profile {
-        name: String,
-        gender: String,
-        location: String,
-        website: String,
+        name: String
+        gender: String
+        location: String
+        website: String
         picture: String
     }
   
@@ -35,13 +35,21 @@ export default gql`
         user(_id: ID!): User!
         users: [User!]!
                 
-        login(mobile: String!, password: String!): Token!
+        loginByMobile( mobile: String!, password: String! ): Token!
+        me: User!
     }
 
     extend type Mutation {
-        createUser(user: CreateUserInput): User!
-        updateUser(_id: String!, user: UpdateUserInput!): User!
-        deleteUser(_id: String!): User!
+        createUser(
+            user: CreateUserInput!
+        ): User!
+        updateUser(
+            _id: String!
+            user: UpdateUserInput!
+        ): User!
+        deleteUser(
+            _id: String!
+        ): User!
     }
 
     input CreateUserInput {

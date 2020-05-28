@@ -1,25 +1,25 @@
-import User from './models/User'
-import Organization from './models/Organization'
-import Branch from './models/Branch'
-import Invite from './models/Invite'
-import OrgAdminTransfer from './models/OrgAdminTransfer'
+import userModel from './models/User'
+import organizationModel from './models/Organization'
+import branchModel from './models/Branch'
+import inviteModel from './models/Invite'
+import orgAdminTransferModel from './models/OrgAdminTransfer'
 
-import ACL from './models/ACL'
-import ACLGroup from './models/ACLGroup'
+import aclModel from './models/ACL'
+import aclGroupModel from './models/ACLGroup'
 
-import UserACL from './models/UserACL'
-import AdminACL from './models/AdminACL'
+import userACLModel from './models/UserACL'
+import adminACLModel from './models/AdminACL'
 
 export const models = {
-    User,
-    Organization,
-    Branch,
+    userModel,
+    organizationModel,
+    branchModel,
 
-    Invite,
-    OrgAdminTransfer,
+    inviteModel,
+    orgAdminTransferModel,
 
-    ACL,
-    ACLGroup,
-    UserACL,
-    AdminACL,
+    aclModel,
+    aclGroupModel,
+    userACLModel,
+    adminACLModel,
 }

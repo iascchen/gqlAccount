@@ -54,44 +54,46 @@ const getUser = async (req) => {
     }
 }
 
-const adminServer = new ApolloServer({
+// const adminServer = new ApolloServer({
+//     typeDefs: adminTypeDefs,
+//     resolvers: adminResolvers,
+//     context: async ({ req }) => {
+//         if (req) {
+//             const me = await getUser(req)
+//             if(!me){
+//                 throw new AuthenticationError('Your session expired. Sign in again.')
+//             } else {
+//                 return {
+//                     me,
+//                     models,
+//                 }
+//             }
+//         }
+//     },
+// })
+// adminServer.applyMiddleware({ app, path: '/admin' })
+
+const apiServer = new ApolloServer({
+    // typeDefs: apiTypeDefs,
+    // resolvers: apiResolvers,
     typeDefs: adminTypeDefs,
     resolvers: adminResolvers,
     context: async ({ req }) => {
         if (req) {
             const me = await getUser(req)
-            if(!me){
-                throw new AuthenticationError('Your session expired. Sign in again.')
-            } else {
-                return {
-                    me,
-                    models,
-                }
+            return {
+                me,
+                models,
             }
         }
     },
 })
-adminServer.applyMiddleware({ app, path: '/admin' })
-
-// const apiServer = new ApolloServer({
-//     typeDefs: apiTypeDefs,
-//     resolvers: apiResolvers,
-//     context: async ({ req }) => {
-//         if (req) {
-//             const me = await getUser(req)
-//             return {
-//                 me,
-//                 models,
-//             }
-//         }
-//     },
-// })
-// apiServer.applyMiddleware({ app, path: '/api' })
+apiServer.applyMiddleware({ app, path: '/api' })
 
 app.listen(app.get('port'), () => {
-    console.log('  🚀 Admin Server is running at http://localhost:%d%s in %s mode', app.get('port'), adminServer.graphqlPath,
-        app.get('env'))
-    // console.log('  🚀 API Server is running at http://localhost:%d%s in %s mode', app.get('port'), apiServer.graphqlPath,
+    // console.log('  🚀 Admin Server is running at http://localhost:%d%s in %s mode', app.get('port'), adminServer.graphqlPath,
     //     app.get('env'))
+    console.log('  🚀 API Server is running at http://localhost:%d%s in %s mode', app.get('port'), apiServer.graphqlPath,
+        app.get('env'))
     console.log('  Press CTRL-C to stop\n')
 })
