@@ -1,3 +1,5 @@
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 import express from 'express'
 import {ApolloServer, AuthenticationError} from 'apollo-server-express'
 import path from 'path'

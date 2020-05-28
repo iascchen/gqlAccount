@@ -32,6 +32,7 @@
         "body-parser": "^1.19.0",
         "compression": "^1.7.4",
         "cookie-parser": "^1.4.5",
+        "core-js": "^3.6.5",
         "cors": "^2.8.5",
         "debug": "^4.1.1",
         "dotenv": "^8.2.0",
@@ -43,13 +44,13 @@
         "passport": "^0.4.1",
         "passport-jwt": "^4.0.0",
         "passport-local": "^1.0.0",
+        "regenerator-runtime": "^0.13.5",
         "winston": "^3.2.1"
     },
     "devDependencies": {
         "@babel/cli": "^7.8.4",
         "@babel/core": "^7.9.6",
         "@babel/node": "^7.8.7",
-        "@babel/polyfill": "^7.8.7",
         "@babel/preset-env": "^7.9.6",
         "eslint": "^7.1.0",
         "jest": "^26.0.1",
