@@ -14,7 +14,10 @@ const prod = ENVIRONMENT === 'production' // Anything else is treated as 'dev'
 
 export const SESSION_SECRET = process.env['SESSION_SECRET'] || 'zdn_jwt_secret_XXX'
 export const DB_URI = prod ? process.env['DB_URI'] : process.env['DB_URI_LOCAL']
+
 export const HEADER_FOR_AUTH = process.env['HEADER_FOR_AUTH'] || 'token'
+export const PASSWORD_RESET_TOKEN_LEN = process.env['PASSWORD_RESET_TOKEN_LEN'] || 4
+export const INVITE_TOKEN_TTL = process.env['INVITE_TOKEN_TTL'] || 180
 
 if (!SESSION_SECRET) {
     logger.error('No client secret. Set SESSION_SECRET environment variable.')

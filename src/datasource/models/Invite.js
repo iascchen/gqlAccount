@@ -1,14 +1,15 @@
 import mongoose from 'mongoose'
+import {INVITE_TOKEN_TTL} from '../../utils/secrets'
 
 const InviteSchema = new mongoose.Schema({
-    token: { type: String, unique: true, required: true },
+    mobile: { type: String, unique: true, required: true },
+    token: { type: String, required: true },
     expires: Date,
 
-    fromUserId: { type: String, required: true },
+    fromUserId: String,
     organizationId: String,
     branchId: String,
 
-    mobile: String,
     email: String,
     wechat: String,
     weibo: String,

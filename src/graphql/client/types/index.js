@@ -7,14 +7,6 @@ const typeDefs = gql`
         token: String!
         user: String
     }
-
-    type Query {
-        _: Boolean
-    }
-
-    type Mutation {
-        _: Boolean
-    }
     
     type Profile {
         name: String
@@ -28,10 +20,7 @@ const typeDefs = gql`
         _id: String!
         
         mobile: String!
-        password: String
-        passwordResetToken: String
-        passwordResetExpires: Date
-    
+        
         email: String
         wechat: String
         weibo: String
@@ -42,31 +31,60 @@ const typeDefs = gql`
 
         profile: Profile
     }
+    
+    type Invite {
+        _id: String!
+        mobile: String!
+        token: String!
+    }
 
     extend type Query {
-        loginByMobile( mobile: String!, password: String! ): Token!
+        loginByMobile ( 
+            mobile: String!, 
+            password: String! 
+        ): Token!
+        
         me: User!
     }
 
     extend type Mutation {
-        createUser(
+        createUser (
             user: CreateUserInput!
         ): User!
-        updateUser(
+        
+        updateUser (
             _id: String!
             user: UpdateUserInput!
         ): User!
+        
+        resetPassword (
+            user: ResetPasswordInput!
+        ): User!
+        
+        passwordResetToken ( 
+            mobile: String! 
+        ): User!
+        
+        inviteToken ( 
+            mobile: String! 
+        ): Invite!
     }
 
     input CreateUserInput {
         mobile: String!
         password: String!
+        inviteToken: String
         email: String
     }
   
+    input ResetPasswordInput {
+        mobile: String!
+        password: String!
+        passwordResetToken: String!
+    }
+    
     input UpdateUserInput {
         email: String
-        password: String
         profile: ProfileInput
     }
     
