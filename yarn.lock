@@ -2,6 +2,16 @@
 # yarn lockfile v1
 
 
+"@apollo/federation@^0.16.2":
+  version "0.16.2"
+  resolved "https://registry.npm.taobao.org/@apollo/federation/download/@apollo/federation-0.16.2.tgz#a6e100e6d89306559023012ed0084a9cc5011dbf"
+  integrity sha1-puEA5tiTBlWQIwEu0AhKnMUBHb8=
+  dependencies:
+    apollo-graphql "^0.4.0"
+    apollo-server-env "^2.4.4"
+    core-js "^3.4.0"
+    lodash.xorby "^4.7.0"
+
 "@apollo/protobufjs@^1.0.3":
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/@apollo/protobufjs/download/@apollo/protobufjs-1.0.4.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40apollo%2Fprotobufjs%2Fdownload%2F%40apollo%2Fprotobufjs-1.0.4.tgz#cf01747a55359066341f31b5ce8db17df44244e0"
@@ -1588,6 +1598,14 @@ apollo-server-core@^2.13.1:
     subscriptions-transport-ws "^0.9.11"
     ws "^6.0.0"
 
+apollo-server-env@^2.4.4:
+  version "2.4.4"
+  resolved "https://registry.npm.taobao.org/apollo-server-env/download/apollo-server-env-2.4.4.tgz#12d2d0896dcb184478cba066c7a683ab18689ca1"
+  integrity sha1-EtLQiW3LGER4y6Bmx6aDqxhonKE=
+  dependencies:
+    node-fetch "^2.1.2"
+    util.promisify "^1.0.0"
+
 apollo-server-env@^2.4.4-alpha.0:
   version "2.4.4-alpha.0"
   resolved "https://registry.npm.taobao.org/apollo-server-env/download/apollo-server-env-2.4.4-alpha.0.tgz#56e860b6af116cdbd05fc4bfe51d5851bde2413e"
@@ -2369,7 +2387,7 @@ core-js-compat@^3.6.2:
     browserslist "^4.8.5"
     semver "7.0.0"
 
-core-js@^3.0.1, core-js@^3.2.1, core-js@^3.6.5:
+core-js@^3.0.1, core-js@^3.2.1, core-js@^3.4.0, core-js@^3.6.5:
   version "3.6.5"
   resolved "https://registry.npm.taobao.org/core-js/download/core-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
   integrity sha1-c5XcJzrzf7LlDpvT2f6EEoUjHRo=
@@ -4600,6 +4618,11 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.npm.taobao.org/lodash.sortby/download/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
+lodash.xorby@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.npm.taobao.org/lodash.xorby/download/lodash.xorby-4.7.0.tgz#9c19a6f9f063a6eb53dd03c1b6871799801463d7"
+  integrity sha1-nBmm+fBjputT3QPBtocXmYAUY9c=
+
 lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15:
   version "4.17.15"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
@@ -5567,12 +5590,7 @@ regenerate@^1.4.0:
   resolved "https://registry.npm.taobao.org/regenerate/download/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
   integrity sha1-SoVuxLVuQHfFV1icroXnpMiGmhE=
 
-regenerator-runtime@^0.13.4:
-  version "0.13.5"
-  resolved "https://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.13.5.tgz?cache=0&sync_timestamp=1584052392667&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fregenerator-runtime%2Fdownload%2Fregenerator-runtime-0.13.5.tgz#d878a1d094b4306d10b9096484b33ebd55e26697"
-  integrity sha1-2Hih0JS0MG0QuQlkhLM+vVXiZpc=
-
-regenerator-runtime@^0.13.5:
+regenerator-runtime@^0.13.4, regenerator-runtime@^0.13.5:
   version "0.13.5"
   resolved "https://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.13.5.tgz#d878a1d094b4306d10b9096484b33ebd55e26697"
   integrity sha1-2Hih0JS0MG0QuQlkhLM+vVXiZpc=

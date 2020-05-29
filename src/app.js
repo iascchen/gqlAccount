@@ -2,6 +2,7 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import express from 'express'
 import {ApolloServer, AuthenticationError} from 'apollo-server-express'
+import {buildFederatedSchema} from '@apollo/federation'
 import path from 'path'
 import bodyParser from 'body-parser'
 import compression from 'compression'
@@ -11,7 +12,7 @@ import passport from 'passport'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-import {DB_URI, SESSION_SECRET} from './utils/secrets'
+import {DB_URI, HEADER_FOR_AUTH, SESSION_SECRET} from './utils/secrets'
 import {models} from './datasource'
 
 import adminTypeDefs from './graphql/admin/types'
@@ -48,7 +49,8 @@ app.use(passport.session())
 // app.use('*', jwtCheck, requireAuth, checkScope);
 
 const getUser = async (req) => {
-    const token = req.headers['token']
+    const token = req.headers[HEADER_FOR_AUTH]
+    console.log('getUser token', token)
 
     if (token) {
         try {
@@ -75,8 +77,7 @@ const adminServer = new ApolloServer({
 adminServer.applyMiddleware({ app, path: '/admin' })
 
 const apiServer = new ApolloServer({
-    typeDefs: apiTypeDefs,
-    resolvers: apiResolvers,
+    schema: buildFederatedSchema([{ typeDefs: apiTypeDefs, resolvers: apiResolvers }]),
     context: async ({ req }) => {
         if (req) {
             const me = await getUser(req)
