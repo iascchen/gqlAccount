@@ -76,7 +76,7 @@ const adminServer = new ApolloServer({
 })
 adminServer.applyMiddleware({ app, path: '/admin' })
 
-const apiServer = new ApolloServer({
+const accountServer = new ApolloServer({
     schema: buildFederatedSchema([{ typeDefs: apiTypeDefs, resolvers: apiResolvers }]),
     context: async ({ req }) => {
         if (req) {
@@ -88,12 +88,15 @@ const apiServer = new ApolloServer({
         }
     },
 })
-apiServer.applyMiddleware({ app, path: '/api' })
+accountServer.applyMiddleware({ app, path: '/login' })
 
+/**
+ * Start Express server.
+ */
 app.listen(app.get('port'), () => {
-    console.log('  🚀 Admin Server is running at http://localhost:%d%s in %s mode', app.get('port'), adminServer.graphqlPath,
+    console.log('  🚀 Account Admin Server is running at http://localhost:%d%s in %s mode', app.get('port'), adminServer.graphqlPath,
         app.get('env'))
-    console.log('  🚀 API Server is running at http://localhost:%d%s in %s mode', app.get('port'), apiServer.graphqlPath,
+    console.log('  🚀 Account Login API Server is running at http://localhost:%d%s in %s mode', app.get('port'), accountServer.graphqlPath,
         app.get('env'))
     console.log('  Press CTRL-C to stop\n')
 })

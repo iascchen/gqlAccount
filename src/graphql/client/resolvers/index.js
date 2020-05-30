@@ -59,7 +59,9 @@ export default {
             console.log('resetPassword', user)
 
             const me = await userModel.findOne({ mobile: user.mobile })
-            if (me.passwordResetToken === user.passwordResetToken) {
+            const now = new Date().getTime()
+            if (me.passwordResetToken === user.passwordResetToken
+                && now < user.passwordResetExpires.getTime()) {
                 me.password = user.password
             } else {
                 throw new AuthenticationError('You are not authenticated')

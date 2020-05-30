@@ -1,7 +1,7 @@
 export const genDigitToken = (n = 4) => {   // n digit
-    const r = Math.random() * (10 ** (n+1))
-    // console.log('genDigitToken', r)
-    return Math.ceil(r).toString().substr(n)
+    const r = (Math.random() + 0.1) * (10 ** n)
+    console.log('genDigitToken', r)
+    return Math.ceil(r).toString().substr(0, n)
 }
 
 export const addSeconds = (date, seconds) => {
