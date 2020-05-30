@@ -50,7 +50,7 @@ app.use(passport.session())
 
 const getUser = async (req) => {
     const token = req.headers[HEADER_FOR_AUTH]
-    console.log('getUser token', token)
+    // console.log('getUser token', token)
 
     if (token) {
         try {
