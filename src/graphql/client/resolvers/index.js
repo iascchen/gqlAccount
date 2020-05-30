@@ -31,8 +31,7 @@ export default {
     },
     Mutation: {
         createUser: async (parent, { user }, { models: { userModel, inviteModel } }, info) => {
-            console.log('createUser', user)
-
+            // console.log('createUser', user)
             const exist = await inviteModel.findOne({ mobile: user.mobile, token: user.inviteToken })
             if (!exist) {
                 throw new AuthenticationError('Invalid invite token')
@@ -47,6 +46,7 @@ export default {
             })
         },
         updateUser: async (parent, { _id, user }, { models: { userModel } }, info) => {
+            // console.log('updateUser', user)
             return new Promise((resolve, reject) => {
                 userModel.findByIdAndUpdate(_id, { $set: { ...user } }, { new: true }).exec(
                     (err, res) => {
@@ -56,12 +56,15 @@ export default {
             })
         },
         resetPassword: async (parent, { user }, { models: { userModel } }, info) => {
-            console.log('resetPassword', user)
-
+            // console.log('resetPassword', user)
             const me = await userModel.findOne({ mobile: user.mobile })
+            if (!me) {
+                throw new AuthenticationError('Without this mobile number')
+            }
+
             const now = new Date().getTime()
-            if (me.passwordResetToken === user.passwordResetToken
-                && now < user.passwordResetExpires.getTime()) {
+            if ((user.passwordResetToken === me.passwordResetToken)
+                && (now < me.passwordResetExpires.getTime())) {
                 me.password = user.password
             } else {
                 throw new AuthenticationError('You are not authenticated')
@@ -73,8 +76,7 @@ export default {
             })
         },
         passwordResetToken: async (parent, { mobile }, { models: { userModel } }, info) => {
-            console.log('passwordResetToken', mobile)
-
+            // console.log('passwordResetToken', mobile)
             const me = await userModel.findOne({ mobile: mobile })
             if (!me) {
                 throw new AuthenticationError('Without this mobile number')
@@ -90,7 +92,7 @@ export default {
             })
         },
         inviteToken: async (parent, { mobile }, { models: { inviteModel } }, info) => {
-            console.log('inviteToken', mobile)
+            // console.log('inviteToken', mobile)
             const exist = await inviteModel.findOne({ mobile: mobile })
             if (exist) {
                 return exist
