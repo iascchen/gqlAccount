@@ -29,12 +29,14 @@ export default gql`
         
         organizations: [Organization!]!
         branches: [Branch!]!
+        adminAcls: [AdminACL!]!
     }
 
     extend type Query {
         user(_id: ID!): User!
         users: [User!]!
                 
+        login ( mobile: String!, password: String! ): Token!
         loginByMobile( mobile: String!, password: String! ): Token!
         me: User!
     }

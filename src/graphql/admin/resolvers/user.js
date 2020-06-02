@@ -85,5 +85,9 @@ export default {
             const ret = await branchModel.find({ branches: _id }).exec()
             return ret
         },
+        adminAcls: async ({ _id }, args, { models: { adminACLModel } }, info) => {
+            const ret = await adminACLModel.find({ users: _id }).exec()
+            return ret
+        },
     }
 }

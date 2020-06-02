@@ -7,13 +7,18 @@ const typeDefs = gql`
         token: String!
         user: String
     }
-    
+  
     type Profile {
         name: String
         gender: String
         location: String
         website: String
         picture: String
+    }
+    
+    type AuthPayload {
+        token: String!
+        user: User
     }
   
     type User {
@@ -30,6 +35,16 @@ const typeDefs = gql`
         github: String
 
         profile: Profile
+        
+        userACLs: [UserACL]
+    }
+    
+    type UserACL {
+        _id: String!
+        userId: String!
+        orgId: String
+        branchId: String
+        aclHashes: [String]
     }
     
     type Invite {
@@ -38,42 +53,28 @@ const typeDefs = gql`
         token: String!
     }
 
-    extend type Query {
-        loginByMobile ( 
-            mobile: String!, 
-            password: String! 
-        ): Token!
-        
-        me: User!
+    extend type Query {         
+        me: User
     }
 
     extend type Mutation {
-        createUser (
-            user: CreateUserInput!
-        ): User!
+        loginByMobile( mobile: String!, password: String! ): AuthPayload
         
-        updateUser (
-            _id: String!
-            user: UpdateUserInput!
-        ): User!
+        logout: Boolean
         
-        resetPassword (
-            user: ResetPasswordInput!
-        ): User!
+        inviteToken ( mobile: String! ): Invite!
+        signUp( user: CreateUserInput! ): User!
+  
+        passwordResetToken ( mobile: String! ): User!
+        resetPassword ( user: ResetPasswordInput! ): User!
         
-        passwordResetToken ( 
-            mobile: String! 
-        ): User!
-        
-        inviteToken ( 
-            mobile: String! 
-        ): Invite!
+        updateUser ( _id: String!, user: UpdateUserInput! ): User!
     }
 
     input CreateUserInput {
         mobile: String!
         password: String!
-        inviteToken: String
+        inviteToken: String!
         email: String
     }
   
