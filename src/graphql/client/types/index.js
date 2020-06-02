@@ -33,6 +33,8 @@ const typeDefs = gql`
         twitter: String
         google: String
         github: String
+        
+        passwordResetToken: String
 
         profile: Profile
         
@@ -68,7 +70,7 @@ const typeDefs = gql`
         passwordResetToken ( mobile: String! ): User!
         resetPassword ( user: ResetPasswordInput! ): User!
         
-        updateUser ( _id: String!, user: UpdateUserInput! ): User!
+        updateUser ( id: String!, user: UpdateUserInput! ): User!
     }
 
     input CreateUserInput {

@@ -25,5 +25,4 @@ COPY yarn.lock /opt/app/yarn.lock
 RUN yarn
 
 COPY . /opt/app
-RUN yarn clean && yarn build
-COPY ./dist /opt/app
+RUN yarn clean && yarn build && cp ./dist /opt/app

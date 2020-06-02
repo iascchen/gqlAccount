@@ -6,7 +6,7 @@ GraphQL Account Center for SAAS, support multi-Talent organization
  
 ### MongoDB
 
-    docker run --name my-mongo -p 27017:27017 -d mongo
+    docker run --name my-mongo -p 27017:27017 -d mongo 
 
 ### Run
 
@@ -23,6 +23,8 @@ Modify .env
     
     # GraphQL Account Center
     HEADER_FOR_AUTH=x-app-token
+    
+    
     # Put lots of randomness in these, MUST same with Account Center
     SESSION_SECRET=xxxxxxxx
     

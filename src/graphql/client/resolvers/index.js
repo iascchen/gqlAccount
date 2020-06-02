@@ -5,8 +5,8 @@ import {addSeconds, genDigitToken} from '../../../utils/tools'
 
 export default {
     Query: {
-        me: (parent, args, context) => {
-            return context.getUser()
+        me: (parent, args, { user }) => {
+            return user
         },
     },
     Mutation: {
@@ -17,14 +17,12 @@ export default {
             if (!user) {
                 throw new AuthenticationError('Invalid credentials')
             }
-
             context.login(user)
 
-            const _user = { _id: user._id, mobile: user.mobile, email: user.email }
+            const _user = { ...user.toJSON() }
             delete _user.passwordResetExpires
-            delete _user.passwordResetToken
+            // delete _user.passwordResetToken
             delete _user.password
-
             const token = jwt.sign({ 'gqlAccount': _user }, SESSION_SECRET,
                 { expiresIn: 3600 * 10 })    // s
             return { token, user: _user }
@@ -33,9 +31,15 @@ export default {
         logout: async (parent, args, context) => context.logout(),
 
         // Sign Up
-        inviteToken: async (parent, { mobile }, { models: { inviteModel } }) => {
+        inviteToken: async (parent, { mobile }, { models: { userModel, inviteModel } }) => {
             // console.log('inviteToken', mobile)
-            const exist = await inviteModel.findOne({ mobile: mobile })
+
+            const existUser = await userModel.findOne({ mobile })
+            if (existUser) {
+                throw new ForbiddenError('User already exists!')
+            }
+
+            const exist = await inviteModel.findOne({ mobile })
             if (exist) {
                 return exist
             }
@@ -49,9 +53,8 @@ export default {
             await newInvite.save()
             return newInvite
         },
-        signUp: async (parent, { user }, context) => {
+        signUp: async (parent, { user }, { models: { userModel, inviteModel } }) => {
             console.log('signUp', user)
-            const { userModel, inviteModel } = context.models
 
             const existUser = await userModel.findOne({ mobile: user.mobile })
             if (existUser) {
@@ -97,8 +100,9 @@ export default {
             return await _me.save()
         },
 
-        updateUser: async (parent, { _id, user }, { models: { userModel } }) => {
-            return await userModel.findByIdAndUpdate(_id, { $set: { ...user } }, { new: true })
+        updateUser: async (parent, { id, user }, { models: { userModel } }) => {
+            console.log('updateUser', user)
+            return await userModel.findByIdAndUpdate(id, { $set: { ...user } }, { new: true })
         },
     },
     User: {

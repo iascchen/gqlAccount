@@ -11,7 +11,6 @@ import cors from 'cors'
 import passport from 'passport'
 import mongoose from 'mongoose'
 import mongo from 'connect-mongo'
-import {applyMiddleware} from 'graphql-middleware'
 
 import {DB_URI, HEADER_FOR_AUTH, SESSION_SECRET} from './utils/secrets'
 import {models} from './datasource'
@@ -20,12 +19,12 @@ import adminResolvers from './graphql/admin/resolvers'
 import apiTypeDefs from './graphql/client/types'
 import apiResolvers from './graphql/client/resolvers'
 import authentication_setup from './auth/authentication'
-import {permissions} from './auth/permissions'
 
 // Connect to MongoDB
 mongoose.Promise = global.Promise
 const mongoUrl = DB_URI
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }).then(
+mongoose.connect(mongoUrl,
+    { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true }).then(
     () => {
         /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
         console.log('MongoDB connection ok. ')
@@ -83,6 +82,10 @@ const getJwtUser = async (req) => {
 const adminServer = new ApolloServer({
     typeDefs: adminTypeDefs,
     resolvers: adminResolvers,
+    // schema: applyMiddleware(
+    //     buildFederatedSchema([{ typeDefs: apiTypeDefs, resolvers: apiResolvers }]),
+    //     permissions
+    // ),
     context: ({ req, res }) => {
         const user = req.user || null
         return buildContext({ req, res, models, user })
@@ -91,15 +94,10 @@ const adminServer = new ApolloServer({
 adminServer.applyMiddleware({ app, path: '/admin' })
 
 const accountServer = new ApolloServer({
-    schema: applyMiddleware(
-        buildFederatedSchema([{ typeDefs: apiTypeDefs, resolvers: apiResolvers }]),
-        permissions
-    ),
+    schema: buildFederatedSchema([{ typeDefs: apiTypeDefs, resolvers: apiResolvers }]),
     context: async ({ req, res }) => {
-        const getUser = async () => {
-            req.user || await getJwtUser(req)
-        }
-        return buildContext({ req, res, models, getUser })
+        const user = req.user || await getJwtUser(req)
+        return buildContext({ req, res, models, user })
     }
 })
 accountServer.applyMiddleware({ app, cors: false, path: '/login' })
