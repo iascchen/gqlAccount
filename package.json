@@ -28,7 +28,7 @@
     "homepage": "https://github.com/iascchen/gqlAccount#readme",
     "dependencies": {
         "@apollo/federation": "^0.16.2",
-        "apollo-server-express": "^2.13.1",
+        "apollo-server-express": "^2.14.2",
         "bcrypt-nodejs": "^0.0.3",
         "connect-mongo": "^3.2.0",
         "core-js": "^3.6.5",
