@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import bcrypt from 'bcrypt-nodejs'
+import bcrypt from 'bcrypt'
 import {ORG_STATUS_NORMAL} from './constants'
 
 const UserSchema = new mongoose.Schema({

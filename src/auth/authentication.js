@@ -1,6 +1,6 @@
 import passport from 'passport'
 import {GraphQLLocalStrategy} from 'graphql-passport'
-import bcrypt from 'bcrypt-nodejs'
+import bcrypt from 'bcrypt'
 
 import userModel from '../datasource/models/User'
 

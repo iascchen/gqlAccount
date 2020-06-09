@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt-nodejs'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {AuthenticationError} from 'apollo-server-express'
 import {SESSION_SECRET} from '../../../utils/secrets'
