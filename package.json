@@ -27,8 +27,8 @@
     },
     "homepage": "https://github.com/iascchen/gqlAccount#readme",
     "dependencies": {
-        "@apollo/federation": "^0.16.5",
-        "apollo-server-express": "^2.14.3",
+        "@apollo/federation": "^0.16.9",
+        "apollo-server-express": "^2.15.0",
         "bcrypt": "^5.0.0",
         "connect-mongo": "^3.2.0",
         "core-js": "^3.6.5",
@@ -40,12 +40,12 @@
         "graphql-middleware": "^4.0.2",
         "graphql-passport": "^0.6.3",
         "graphql-resolvers": "^0.4.2",
-        "graphql-shield": "^7.3.0",
+        "graphql-shield": "^7.3.2",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.9.16",
+        "mongoose": "^5.9.20",
         "passport": "^0.4.1",
         "regenerator-runtime": "^0.13.5",
-        "winston": "^3.2.1"
+        "winston": "^3.3.2"
     },
     "devDependencies": {
         "@babel/cli": "^7.10.1",
