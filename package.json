@@ -42,7 +42,7 @@
         "graphql-resolvers": "^0.4.2",
         "graphql-shield": "^7.4.2",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.10.17",
+        "mongoose": "^5.11.2",
         "passport": "^0.4.1",
         "regenerator-runtime": "^0.13.7",
         "winston": "^3.3.2"
