@@ -11,7 +11,7 @@ import {
     LDAP_SERVER,
     LDAP_USER_BASE, LDAP_USER_EMAIL,
     LDAP_USER_FILTER,
-    LDAP_USER_FULLNAME, LDAP_USER_MOBILE, LDAP_USER_USERNAME, TLS_OPTIONS
+    LDAP_USER_FULLNAME, LDAP_USER_MOBILE, LDAP_USER_RDN, TLS_OPTIONS
 } from '../utils/secrets'
 
 const getLDAPConfiguration = (req, callback) => {
@@ -30,7 +30,7 @@ const getLDAPConfiguration = (req, callback) => {
                 searchBase: LDAP_USER_BASE,
                 searchFilter: LDAP_USER_FILTER,
                 searchAttributes: [
-                    LDAP_USER_USERNAME, LDAP_USER_FULLNAME, LDAP_USER_EMAIL, LDAP_USER_MOBILE,
+                    LDAP_USER_RDN, LDAP_USER_FULLNAME, LDAP_USER_EMAIL, LDAP_USER_MOBILE,
                     'uid', 'cn', 'sn', 'displayName', 'mail', 'mobile',
                     'picture', 'website', 'location', 'gender'  // TODO define LDAP attribute
                 ],
@@ -86,7 +86,7 @@ export const authentication_setup = () => {
                 ...user
             }
             const { email, mobile} = profile
-            const retUser = { _id: user[LDAP_USER_USERNAME] || user.uid, ldapDN: user.dn,
+            const retUser = { _id: user[LDAP_USER_RDN] || user.uid, ldapDN: user.dn,
                 email, mobile, profile }
             return done(null, retUser)
         })
