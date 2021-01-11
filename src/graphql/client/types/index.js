@@ -23,10 +23,14 @@ const typeDefs = gql`
   
     type User {
         _id: String!
+        openId: String
         
-        mobile: String!
+        mobile: String
+        passwordResetToken: String
         
         email: String
+        ldapDN: String
+        
         wechat: String
         weibo: String
         facebook: String
@@ -34,8 +38,6 @@ const typeDefs = gql`
         google: String
         github: String
         
-        passwordResetToken: String
-
         profile: Profile
         
         userACLs: [UserACL]
@@ -61,6 +63,7 @@ const typeDefs = gql`
 
     extend type Mutation {
         loginByMobile( mobile: String!, password: String! ): AuthPayload
+        loginByLdap( uid: String!, password: String! ): AuthPayload
         
         logout: Boolean
         

@@ -11,20 +11,23 @@ export default gql`
   
     type User {
         _id: String!
+        openId: String
         
-        mobile: String!
+        mobile: String
         password: String
         passwordResetToken: String
         passwordResetExpires: Date
     
         email: String
+        ldapDN: String
+        
         wechat: String
         weibo: String
         facebook: String
         twitter: String
         google: String
         github: String
-
+        
         profile: Profile
         
         organizations: [Organization!]!

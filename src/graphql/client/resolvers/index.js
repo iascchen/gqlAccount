@@ -28,6 +28,25 @@ export default {
             return { token, user: _user }
         },
 
+        loginByLdap: async (parent, { uid, password }, context) => {
+            // console.log('in login ldap', uid, password)
+            const { user } = await context.authenticate('ldapauth', { uid: uid, password })
+            console.log('in login authenticated', user)
+            if (!user) {
+                throw new AuthenticationError('Invalid credentials')
+            }
+            context.login(user)
+
+            const _user = { ...user }
+            _user.openId = `Local_${user._id}`
+            delete _user.passwordResetExpires
+            // delete _user.passwordResetToken
+            delete _user.password
+            const token = jwt.sign({ 'gqlAccount': _user }, SESSION_SECRET,
+                { expiresIn: 3600 * 10 })    // s
+            return { token, user: _user }
+        },
+
         logout: async (parent, args, context) => context.logout(),
 
         // Sign Up

@@ -32,3 +32,18 @@ if (!DB_URI) {
     }
     process.exit(1)
 }
+
+/////////////////////////////
+// LDAP Setting Env
+/////////////////////////////
+
+export const LDAP_SERVER = process.env['LDAP_SERVER'] || 'ldap://localhost:389'
+export const LDAP_BIND_DN = process.env['LDAP_BIND_DN'] || 'cn=admin'
+export const LDAP_BIND_PASSWORD = process.env['LDAP_BIND_PASSWORD'] || 'password'
+export const LDAP_USER_BASE = process.env['LDAP_USER_BASE'] || 'ou=people'
+export const LDAP_USER_FILTER = process.env['LDAP_USER_FILTER'] || '(&(uid={{username}})(objectclass=person))'
+export const LDAP_USER_USERNAME = process.env['LDAP_USER_UID'] || 'uid'
+export const LDAP_USER_FULLNAME = process.env['LDAP_USER_FULLNAME'] || 'sn'
+export const LDAP_USER_EMAIL = process.env['LDAP_USER_EMAIL'] || 'mail'
+export const LDAP_USER_MOBILE = process.env['LDAP_USER_MOBILE'] || 'mobile'
+export const TLS_OPTIONS = process.env['TLS_OPTIONS'] ? JSON.parse(process.env['TLS_OPTIONS']) : { }

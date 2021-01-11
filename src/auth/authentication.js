@@ -1,8 +1,47 @@
 import passport from 'passport'
+// import * as fs from 'fs'
+import LdapStrategy from 'passport-ldapauth'
 import {GraphQLLocalStrategy} from 'graphql-passport'
 import bcrypt from 'bcrypt'
 
 import userModel from '../datasource/models/User'
+import {
+    LDAP_BIND_DN,
+    LDAP_BIND_PASSWORD,
+    LDAP_SERVER,
+    LDAP_USER_BASE, LDAP_USER_EMAIL,
+    LDAP_USER_FILTER,
+    LDAP_USER_FULLNAME, LDAP_USER_MOBILE, LDAP_USER_USERNAME, TLS_OPTIONS
+} from '../utils/secrets'
+
+const getLDAPConfiguration = (req, callback) => {
+    const {uid, password} = req.body.variables
+    req.body.username = uid
+    req.body.password = password
+
+    // console.log('in getLDAPConfiguration', uid, password)
+    // Fetching things from database or whatever
+    process.nextTick(() => {
+        const opts = {
+            server: {
+                url: LDAP_SERVER,
+                bindDN: LDAP_BIND_DN,
+                bindCredentials: LDAP_BIND_PASSWORD,
+                searchBase: LDAP_USER_BASE,
+                searchFilter: LDAP_USER_FILTER,
+                searchAttributes: [
+                    LDAP_USER_USERNAME, LDAP_USER_FULLNAME, LDAP_USER_EMAIL, LDAP_USER_MOBILE,
+                    'uid', 'cn', 'sn', 'displayName', 'mail', 'mobile',
+                    'picture', 'website', 'location', 'gender'  // TODO define LDAP attribute
+                ],
+                tlsOptions: TLS_OPTIONS
+            }
+        }
+        // console.log('opt', opts)
+
+        callback(null, opts)
+    })
+}
 
 // Setting up passport
 export const authentication_setup = () => {
@@ -24,12 +63,34 @@ export const authentication_setup = () => {
                     }
 
                     // Authenticated
-                    // console.log('Authenticated', user)
+                    console.log('Authenticated', user)
                     return done(null, user)
                 })
             })
         }
     ))
+
+    passport.use(new LdapStrategy(getLDAPConfiguration, (user, done) => {
+        process.nextTick(() => {
+            if (!user) {
+                return done(null, false, { message: 'Unknown LDAP User ' + user })
+            }
+
+            // Authenticated
+            // console.log('Authenticated', user)
+
+            const profile = {
+                name: user[LDAP_USER_FULLNAME] || user.displayName || user.sn || user.cn,
+                email: user[LDAP_USER_EMAIL] || user.mail,
+                mobile:user[LDAP_USER_MOBILE] || user.mobile,
+                ...user
+            }
+            const { email, mobile} = profile
+            const retUser = { _id: user[LDAP_USER_USERNAME] || user.uid, openId: user.dn, ldapDN: user.dn,
+                email, mobile, profile }
+            return done(null, retUser)
+        })
+    }))
 
     // const wechatCallback = (accessToken, refreshToken, profile, done) => {
     //     // const users = User.getUsers();
