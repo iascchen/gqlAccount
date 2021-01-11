@@ -63,7 +63,7 @@ export const authentication_setup = () => {
                     }
 
                     // Authenticated
-                    console.log('Authenticated', user)
+                    // console.log('Authenticated', user)
                     return done(null, user)
                 })
             })
