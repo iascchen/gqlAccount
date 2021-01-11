@@ -86,7 +86,7 @@ export const authentication_setup = () => {
                 ...user
             }
             const { email, mobile} = profile
-            const retUser = { _id: user[LDAP_USER_USERNAME] || user.uid, openId: user.dn, ldapDN: user.dn,
+            const retUser = { _id: user[LDAP_USER_USERNAME] || user.uid, ldapDN: user.dn,
                 email, mobile, profile }
             return done(null, retUser)
         })

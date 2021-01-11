@@ -20,6 +20,8 @@ export default {
             context.login(user)
 
             const _user = { ...user.toJSON() }
+            _user.openId = `gqla_${user._id}`
+
             delete _user.passwordResetExpires
             // delete _user.passwordResetToken
             delete _user.password
@@ -38,7 +40,7 @@ export default {
             context.login(user)
 
             const _user = { ...user }
-            _user.openId = `Local_${user._id}`
+            _user.openId = user.ldapDN
             delete _user.passwordResetExpires
             // delete _user.passwordResetToken
             delete _user.password
