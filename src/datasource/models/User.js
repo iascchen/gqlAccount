@@ -1,13 +1,24 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
+
 import {ORG_STATUS_NORMAL} from './constants'
+import contactSchema from '../common/Contact'
 
 const UserSchema = new mongoose.Schema({
     mobile: { type: String, unique: true, required: true },
 
     password: String,
+    lastLogin: Date,
+
+    session: String,
+    sessionTime: Number,
+
+    expires: Date,
+    forcePasswordReset: Boolean,
     passwordResetToken: String,
     passwordResetExpires: Date,
+    passwordResetCount: Number,
+    lastPasswordChange: Date,
 
     email: String,
     wechat: String,
@@ -17,12 +28,16 @@ const UserSchema = new mongoose.Schema({
     google: String,
     github: String,
 
+    notifications: Boolean,
+
     profile: {
         name: String,
         gender: String,
         location: String,
         website: String,
-        picture: String
+        picture: String,
+
+        contact: contactSchema,
     },
     status: { type: Number, required: true, default: ORG_STATUS_NORMAL }
 }, { timestamps: true })

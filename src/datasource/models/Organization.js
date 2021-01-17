@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 import {ORG_STATUS_NORMAL} from './constants'
+import ContactSchema from '../common/Contact'
 
 const OrganizationSchema = new mongoose.Schema({
     name: { type: String, unique: true, required: true },
@@ -10,9 +11,17 @@ const OrganizationSchema = new mongoose.Schema({
     site: String,
 
     profile: {
+        country: String,
+        state: String,   // State or Province
+        city: String,   // City
+        address: String,   // diction and street
+
+        contact: ContactSchema,
+
         billAccount: String,    // 银行账号
         license: String,        // 三证合一，编号
         licenseImage: String,   // 三证合一，照片
+
         corporate: String,      // 法人姓名
         corporateIdentity: String, // 法人身份证/护照
         corporatePhotoFront: String, // 身份证图片正面

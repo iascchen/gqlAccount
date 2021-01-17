@@ -10,6 +10,8 @@ GraphQL Account Center for SAAS, support multi-Talent organization
 
 ### Run
 
+    nvm use 14
+
 Set Environment
    
     cp .env.example .env
