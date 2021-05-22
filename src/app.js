@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken'
 import cors from 'cors'
 import passport from 'passport'
 import mongoose from 'mongoose'
-import mongo from 'connect-mongo'
+import MongoStore from 'connect-mongo'
 
 import {DB_URI, HEADER_FOR_AUTH, SESSION_SECRET} from './utils/secrets'
 import {models} from './datasource'
@@ -23,7 +23,7 @@ import authentication_setup from './auth/authentication'
 // Connect to MongoDB
 mongoose.Promise = global.Promise
 const mongoUrl = DB_URI
-mongoose.connect(mongoUrl,
+const clientP = mongoose.connect(mongoUrl,
     { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true }).then(
     () => {
         /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
@@ -33,8 +33,6 @@ mongoose.connect(mongoUrl,
     console.log('MongoDB connection error. Please make sure MongoDB is running. ' + err)
     // process.exit();
 })
-
-const MongoStore = mongo(session)
 
 const app = express()
 
@@ -48,9 +46,9 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     secret: SESSION_SECRET,
-    store: new MongoStore({
-        url: DB_URI,
-        autoReconnect: true
+    store: MongoStore.create({
+        clientPromise: clientP,
+        mongoUrl: DB_URI,
     }),
     // use secure cookies for production meaning they will only be sent via https
     //cookie: { secure: true }
