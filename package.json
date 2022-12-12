@@ -35,7 +35,7 @@
         "cors": "^2.8.5",
         "dotenv": "^10.0.0",
         "errorhandler": "^1.5.1",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "express-session": "^1.17.2",
         "graphql": "^15.5.0",
         "graphql-middleware": "^6.0.10",
